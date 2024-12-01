@@ -186,12 +186,15 @@ _D_FindLibrary(Library library, const char* version)
     } break;
     default: fprintf(stderr, "Not a valid library.\n"); return;
   }
-  printf("Downloading library:\n\tNAME - %s\n\tPATH - %s\n", file, dir);
+  /* printf("Downloading library:\n\tNAME - %s\n\tPATH - %s\n", file, dir); */
   /* TODO: Need support for Windows */
   sprintf(system_cmd, "mkdir -p %s", dir);
   system(system_cmd);
 
-  CInternet.HandleData(filepath, url);
+  if (CFileManager.Validate(filepath))
+  { fprintf(stderr, "File %s already exists in %s.\n", file, dir); }
+  else
+  { CInternet.HandleData(filepath, url); }
 
   /* Just for testing of course. */
   switch (library)
