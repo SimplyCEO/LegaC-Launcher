@@ -199,7 +199,7 @@ _D_FindLibrary(Library library, const char* version)
   /* Just for testing of course. */
   switch (library)
   { case LWJGL:
-    { sprintf(system_cmd, "cd %s && unzip -qq %s", dir, file);
+    { sprintf(system_cmd, "cd %s && unzip -n -qq %s", dir, file);
       system(system_cmd);
       sprintf(system_cmd, "cp %s/lwjgl-%s/jar/* %s/bin", dir, version, mc.directory.game);
       system(system_cmd);
