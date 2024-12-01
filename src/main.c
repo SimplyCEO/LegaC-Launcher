@@ -43,7 +43,7 @@ void
 on_click_open_website(GtkWidget *widget, gpointer data)
 {
   const gchar* url = (const gchar*)data;
-  gtk_show_uri(NULL, url, GDK_CURRENT_TIME, NULL);
+  gtk_show_uri_on_window(NULL, url, GDK_CURRENT_TIME, NULL);
 }
 
 void
