@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+#include "Application.h"
 
 /* Quit the application after main window destroy. */
 void
@@ -9,6 +9,24 @@ on_window_destroy(GtkWidget *widget, gpointer data)
 void
 set_widget_size(GtkWidget* widget, int size_x, int size_y)
 { gtk_widget_set_size_request(widget, size_x, size_y); }
+
+/* Process the log messages in the queue. */
+gboolean process_log_messages(LogDisplay *log_display)
+{
+  gchar *message;
+  GtkTextBuffer *buffer;
+  GtkTextIter end_iter;
+
+  while ((message = g_async_queue_try_pop(log_display->queue)))
+  { buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(log_display->text_view));
+    gtk_text_buffer_get_end_iter(buffer, &end_iter);
+    gtk_text_buffer_insert(buffer, &end_iter, message, -1);
+    g_free(message);
+  }
+
+  return TRUE;
+}
+
 
 /* CApplication.Box.Create:
  * Create a box widget, child of a container, with the desired orientation. */
@@ -28,6 +46,36 @@ void
 _A_Box_Resize(GtkWidget* box, int size_x, int size_y)
 {
   set_widget_size(box, size_x, size_y);
+}
+
+
+
+/* CApplication.Text.Logger
+ * Create a read-only log box. */
+LogDisplay*
+_A_Text_Logger(GtkWidget* widget)
+{
+  LogDisplay* log_display;
+  GtkWidget* scrolled_window;
+  GtkTextBuffer* buffer;
+
+  log_display = g_malloc(sizeof(LogDisplay));
+
+  log_display->text_view = gtk_text_view_new();
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(log_display->text_view), FALSE);
+  gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(log_display->text_view), FALSE);
+
+  buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(log_display->text_view));
+  gtk_text_buffer_set_text(buffer, "", -1);
+
+  scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+  gtk_container_add(GTK_CONTAINER(scrolled_window), log_display->text_view);
+  gtk_box_pack_start(GTK_BOX(widget), scrolled_window, TRUE, TRUE, 0);
+
+  log_display->queue = g_async_queue_new();
+  log_display->source_id = g_timeout_add(100, (GSourceFunc)process_log_messages, log_display);
+
+  return log_display;
 }
 
 /* CApplication.Window.Create:
@@ -55,6 +103,8 @@ _A_Window_Resize(GtkWidget* window, int size_x, int size_y)
 {
   set_widget_size(window, size_x, size_y);
 }
+
+
 
 /* CApplication.Initialise:
  * Start GTK application. */
