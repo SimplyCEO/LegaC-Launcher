@@ -3,6 +3,7 @@
 #include <string.h>
 #include <curl/curl.h>
 
+#include "settings.h"
 #include "Downloader.h"
 #include "FileManager.h"
 #include "Internet.h"
@@ -65,12 +66,12 @@ _D_FindGame(const char* version, const char* type, int force)
 
   /* Construct local directory */
   char system_cmd[80] = {0};
-  sprintf(path, "./instances/%s/minecraft/bin/natives", version);
+  sprintf(path, "%s/bin/natives", mc.directory.game, version);
   sprintf(system_cmd, "mkdir -p %s", path);
   system(system_cmd);
 
   /* Define game JAR */
-  sprintf(path, "./instances/%s/minecraft/bin/minecraft_%s.jar", version, type);
+  sprintf(path, "%s/bin/minecraft_%s.jar", mc.directory.game, version, type);
 
   /* Check if local file already exists */
   if (force | (CFileManager.Validate(path) == 0))
@@ -197,13 +198,13 @@ _D_FindLibrary(Library library, const char* version)
   { case LWJGL:
     { sprintf(system_cmd, "cd %s && unzip -qq %s", dir, file);
       system(system_cmd);
-      sprintf(system_cmd, "cp %s/lwjgl-%s/jar/* ./instances/1.9/minecraft/bin", dir, version);
+      sprintf(system_cmd, "cp %s/lwjgl-%s/jar/* %s/bin", dir, version, mc.directory.game);
       system(system_cmd);
-      sprintf(system_cmd, "cp %s/lwjgl-%s/native/linux/* ./instances/1.9/minecraft/bin/natives", dir, version);
+      sprintf(system_cmd, "cp %s/lwjgl-%s/native/linux/* %s/bin/natives", dir, version, mc.directory.game);
       system(system_cmd);
     } break;
     default:
-    { sprintf(system_cmd, "cp %s ./instances/1.9/minecraft/bin", filepath);
+    { sprintf(system_cmd, "cp %s %s/bin", filepath, mc.directory.game);
       system(system_cmd);
     } break;
   }

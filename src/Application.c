@@ -16,7 +16,8 @@ GtkWidget*
 _A_Box_Create(GtkWidget* container, GtkOrientation orientation)
 {
   GtkWidget *box = gtk_box_new(orientation, 0);
-  gtk_container_add(GTK_CONTAINER(container), box);
+  if (container != NULL)
+  { gtk_container_add(GTK_CONTAINER(container), box); }
 
   return box;
 }

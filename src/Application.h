@@ -7,7 +7,7 @@ static struct ApplicationDefinition
 {
   char* name;
   char* version;
-} application = { "Legacy Launcher", "v0.0.1" };
+} application = { "LegaC Launcher", "v0.0.2" };
 
 GtkWidget* _A_Box_Create(GtkWidget* container, GtkOrientation orientation);
 void       _A_Box_Resize(GtkWidget* box, int size_x, int size_y);
