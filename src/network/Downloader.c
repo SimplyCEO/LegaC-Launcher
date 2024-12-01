@@ -71,7 +71,7 @@ _D_FindGame(const char* version, const char* type, int force)
   system(system_cmd);
 
   /* Define game JAR */
-  sprintf(path, "%s/bin/minecraft_%s.jar", mc.directory.game, version, type);
+  sprintf(path, "%s/bin/minecraft_%s.jar", mc.directory.game, type);
 
   /* Check if local file already exists */
   if (force | (CFileManager.Validate(path) == 0))
