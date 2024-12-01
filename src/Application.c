@@ -26,7 +26,7 @@ _A_Box_Create(GtkWidget* container, GtkOrientation orientation)
 void
 _A_Box_Resize(GtkWidget* box, int size_x, int size_y)
 {
-  return set_widget_size(box, size_x, size_y);
+  set_widget_size(box, size_x, size_y);
 }
 
 /* CApplication.Window.Create:
@@ -52,7 +52,7 @@ _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosit
 void
 _A_Window_Resize(GtkWidget* window, int size_x, int size_y)
 {
-  return set_widget_size(window, size_x, size_y);
+  set_widget_size(window, size_x, size_y);
 }
 
 /* CApplication.Initialise:
