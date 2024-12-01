@@ -49,8 +49,8 @@ RESET_COLOUR  := $(ESCAPE)[0m
 PWD           := $(shell pwd | sed 's/ /\\ /g')
 OBJ_DIR       := $(PWD)/.obj
 SRC_DIR       := $(PWD)/src
-BIN_DIR       := $(PWD)/.
-DIRS          := . .obj .obj/network .obj/util
+BIN_DIR       := $(PWD)/bin
+DIRS          := bin .obj .obj/network .obj/util
 HEADERS       := -I./src -I./src/network -I./src/util
 LIBRARIES     := $(shell pkg-config --libs gtk+-3.0) -lcurl
 
