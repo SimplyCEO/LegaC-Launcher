@@ -24,7 +24,7 @@ else
 endif
 
 ifeq ($(BUILD_TYPE), Release)
-	CFLAGS += -O3
+	CFLAGS += -O2
 else
 	CFLAGS += -O0 -g3 -ggdb -Wall
 endif
