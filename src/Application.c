@@ -96,6 +96,33 @@ _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosit
   return window;
 }
 
+/* CApplication.Window.SetIcon:
+ * Set the application icon. */
+void
+_A_Window_SetIcon(GtkWidget* window, const char* filepath)
+{
+  GdkPixbuf* icon = gdk_pixbuf_new_from_file(filepath, NULL);
+  gtk_window_set_icon(GTK_WINDOW(window), icon);
+  g_object_unref(icon);
+}
+
+/* CApplication.Window.SetIcon:
+ * Set the background image, forcing the size to 96x96. */
+void
+_A_Window_SetBackground(GtkWidget* window, const char* filepath)
+{
+  GtkCssProvider* provider = gtk_css_provider_new();
+
+  gchar* css = g_strdup_printf("window { background-image: url('%s'); background-size: 96px 96px; background-repeat: repeat; }", filepath);
+  gtk_css_provider_load_from_data(provider, css, -1, NULL);
+
+  GtkStyleContext* style_context = gtk_widget_get_style_context(window);
+  gtk_style_context_add_provider(style_context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  g_free(css);
+  g_object_unref(provider);
+}
+
 /* CApplication.Window.Resize
  * Resize a box widget with given position. */
 void

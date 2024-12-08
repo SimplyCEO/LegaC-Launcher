@@ -78,6 +78,8 @@ main(int argc, char* argv[])
   CApplication.Initialise(argc, argv);
 
   window = CApplication.Window.Create(application.name, 700, 490, GTK_WIN_POS_CENTER);
+           CApplication.Window.SetIcon(window, "./assets/icon.png");
+           CApplication.Window.SetBackground(window, "./assets/background.png");
 
   /* Header container */
   vbox  = CApplication.Box.Create(window, GTK_ORIENTATION_VERTICAL);
