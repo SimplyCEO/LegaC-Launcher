@@ -90,116 +90,131 @@ _D_FindLibrary(Library library, const char* version)
 
   char path[MAX_PATH_LENGTH] = {0},
        url[MAX_URL_LENGTH] = {0},
-       dir[128] = {0}, file[128] = {0}, filepath[256] = {0},
+       dir[128] = {0},
        system_cmd[1024] = {0};
+
+  struct localFILE
+  { char name[128];
+    char ext[16];
+    char class[64];
+    char fullname[160];
+    char path[256];
+  } file = {{0},{0},{0},{0},{0}};
 
   switch (library)
   { case LWJGL:
-    { sprintf(dir, "./libraries/org/lwjgl/lwjgl/%s", version);
-      sprintf(file, "lwjgl-%s.zip", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://master.dl.sourceforge.net/project/java-game-lib/Official%%20Releases/LWJGL%%20%s/%s?viasf=1", version, file);
+    { strcpy(file.name , "lwjgl");
+      strcpy(file.ext  , "zip");
+      strcpy(file.class, "org/lwjgl/lwjgl");
     } break;
     case AUTHLIB:
-    { sprintf(dir, "./libraries/com/mojang/authlib/%s", version);
-      sprintf(file, "authlib-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://papermc.io/repo/repository/maven-releases/com/mojang/authlib/%s/%s", version, file);
+    { strcpy(file.name , "authlib");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/mojang/authlib");
     } break;
     case APACHE_COMMONS_IO:
-    { sprintf(dir, "./libraries/org/apache/commons/%s", version);
-      sprintf(file, "commons-io-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/commons-io/commons-io/%s/%s", version, file);
+    { strcpy(file.name , "commons-io");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "commons-io");
     } break;
     case APACHE_COMMONS_LANG3:
-    { sprintf(dir, "./libraries/org/apache/commons/%s", version);
-      sprintf(file, "commons-lang3-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/%s/%s", version, file);
+    { strcpy(file.name , "commons-lang3");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "org/apache/commons");
     } break;
     case GSON:
-    { sprintf(dir, "./libraries/com/google/gson/%s", version);
-      sprintf(file, "gson-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/com/google/code/gson/gson/%s/%s", version, file);
+    { strcpy(file.name , "gson");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/google/code/gson");
     } break;
     case GUAVA:
-    { sprintf(dir, "./libraries/com/google/guava/%s", version);
-      sprintf(file, "guava-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/com/google/guava/guava/%s/%s", version, file);
+    { strcpy(file.name , "guava");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/google/guava");
     } break;
     case ICU4J:
-    { sprintf(dir, "./libraries/com/ibm/icu/%s", version);
-      sprintf(file, "icu4j-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/com/ibm/icu/icu4j/%s/%s", version, file);
+    { strcpy(file.name , "icu4j");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/ibm/icu");
     } break;
     case JOPT_SIMPLE:
-    { sprintf(dir, "./libraries/net/sf/jopt-simple/%s", version);
-      sprintf(file, "jopt-simple-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/net/sf/jopt-simple/jopt-simple/%s/%s", version, file);
+    { strcpy(file.name , "jopt-simple");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "net/sf/jopt-simple");
     } break;
     case LOG4J_CORE:
-    { sprintf(dir, "./libraries/org/apache/logging/%s", version);
-      sprintf(file, "log4j-core-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/%s/%s", version, file);
+    { strcpy(file.name , "log4j-core");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "org/apache/logging/log4j");
     } break;
     case LOG4J_API:
-    { sprintf(dir, "./libraries/org/apache/logging/%s", version);
-      sprintf(file, "log4j-api-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/%s/%s", version, file);
+    { strcpy(file.name , "log4j-api");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "org/apache/logging/log4j");
     } break;
     case PAULSCODE_CODECJORBIS:
-    { sprintf(dir, "./libraries/com/paulscode/%s", version);
-      sprintf(file, "codecjorbis-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://nexus.velocitypowered.com/repository/maven-public/com/paulscode/codecjorbis/%s/%s", version, file);
+    { strcpy(file.name , "codecjorbis");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/paulscode/codecjorbis");
+    } break;
+    case PAULSCODE_CODECWAV:
+    { strcpy(file.name , "codecwav");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/paulscode/codecwav");
     } break;
     case PAULSCODE_JAVA_SOUND:
-    { sprintf(dir, "./libraries/com/paulscode/%s", version);
-      sprintf(file, "libraryjavasound-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://nexus.velocitypowered.com/repository/maven-public/com/paulscode/libraryjavasound/%s/%s", version, file);
+    { strcpy(file.name , "libraryjavasound");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/paulscode/libraryjavasound");
     } break;
     case PAULSCODE_LWJGL_OPENAL:
-    { sprintf(dir, "./libraries/com/paulscode/%s", version);
-      sprintf(file, "librarylwjglopenal-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://nifty-gui.sourceforge.net/nifty-maven-repo/com/paulscode/soundsystem/librarylwjglopenal/%s/%s", version, file);
+    { strcpy(file.name , "librarylwjglopenal");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/paulscode/librarylwjglopenal");
     } break;
     case PAULSCODE_SOUND_SYSTEM:
-    { sprintf(dir, "./libraries/com/paulscode/%s", version);
-      sprintf(file, "soundsystem-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://nexus.velocitypowered.com/repository/maven-public/com/paulscode/soundsystem/%s/%s", version, file);
+    { strcpy(file.name , "soundsystem");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "com/paulscode/soundsystem");
     } break;
     case NETTY_AIO:
-    { sprintf(dir, "./libraries/io/netty/netty-all/%s", version);
-      sprintf(file, "netty-all-%s.jar", version);
-      sprintf(filepath, "%s/%s", dir, file);
-      sprintf(url, "https://repo1.maven.org/maven2/io/netty/netty-all/%s/%s", version, file);
+    { strcpy(file.name , "netty-all");
+      strcpy(file.ext  , "jar");
+      strcpy(file.class, "io/netty/netty-all");
     } break;
     default: fprintf(stderr, "Not a valid library.\n"); return;
   }
-  /* printf("Downloading library:\n\tNAME - %s\n\tPATH - %s\n", file, dir); */
+  sprintf(dir, "./libraries/%s/%s", file.class, version);
+  sprintf(file.fullname, "%s-%s.%s", file.name, version, file.ext);
+  sprintf(file.path, "%s/%s", dir, file.fullname);
+
+  switch (library)
+  { case LWJGL: sprintf(url, "https://master.dl.sourceforge.net/project/java-game-lib/Official%%20Releases/LWJGL%%20%s/%s?viasf=1", version, file.fullname); break;
+    case APACHE_COMMONS_IO:
+    case APACHE_COMMONS_LANG3:
+    case GSON:
+    case GUAVA:
+    case ICU4J:
+    case JOPT_SIMPLE:
+    case LOG4J_CORE:
+    case LOG4J_API: sprintf(url, "https://repo1.maven.org/maven2/%s/%s/%s/%s", file.class, file.name, version, file.fullname); break;
+    default: sprintf(url, "https://repo.papermc.io/repository/maven-public/%s/%s/%s", file.class, version, file.fullname); break;
+  }
+
+  /* printf("Downloading library:\n\tNAME - %s\n\tPATH - %s\n", file.fullname, dir); */
   /* TODO: Need support for Windows */
   sprintf(system_cmd, "mkdir -p %s", dir);
   system(system_cmd);
 
-  if (CFileManager.Validate(filepath))
-  { fprintf(stderr, "File %s already exists in %s.\n", file, dir); }
+  if (CFileManager.Validate(file.path))
+  { fprintf(stderr, "File %s already exists in %s.\n", file.fullname, dir); }
   else
-  { CInternet.HandleData(filepath, url); }
+  { CInternet.HandleData(file.path, url); }
 
   /* Just for testing of course. */
   switch (library)
   { case LWJGL:
-    { sprintf(system_cmd, "cd %s && unzip -n -qq %s", dir, file);
+    { sprintf(system_cmd, "cd %s && unzip -n -qq %s", dir, file.fullname);
       system(system_cmd);
       sprintf(system_cmd, "cp %s/lwjgl-%s/jar/* %s/bin", dir, version, mc.directory.game);
       system(system_cmd);
@@ -207,7 +222,7 @@ _D_FindLibrary(Library library, const char* version)
       system(system_cmd);
     } break;
     default:
-    { sprintf(system_cmd, "cp %s %s/bin", filepath, mc.directory.game);
+    { sprintf(system_cmd, "cp %s %s/bin", file.path, mc.directory.game);
       system(system_cmd);
     } break;
   }

@@ -33,10 +33,6 @@ _I_HandleData(const char* filepath, const char* url)
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, CFileManager.Stream(file));
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60);
 
-    /* TODO: Make this modular or find another URL that does not suck ass. */
-    if (strncmp(filepath, "./libraries/com/paulscode", 20) == 0)
-    { curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); printf("FOUND A URL THAT SUCKS ASS\n"); }
-
     response = curl_easy_perform(curl);
     if (response != CURLE_OK)
     { fprintf(stderr, "cURL error: %s.\n", curl_easy_strerror(response)); }

@@ -14,7 +14,7 @@ play_game(const char* mc_version, const char* mc_username, const char* mc_gamedi
   #if !defined(_WIN32)
     sprintf(java_buffer, "%s -Dorg.lwjgl.openal.libname=/lib/libopenal.so", java_buffer);
   #endif
-  sprintf(java_buffer, "%s -Djava.library.path='%s/bin/natives' -cp '%s/bin/*' %s --username %s --version %s --accessToken 0 --userProperties {} --gameDir %s --assetsDir ./assets --width 800 --height 600", java_buffer, mc_gamedir, mc_gamedir, mc_class, mc_username, mc_version, mc_gamedir);
+  sprintf(java_buffer, "%s -Djava.library.path='%s/bin/natives' -cp '%s/bin/*' %s --username %s --version %s --accessToken 0 --userProperties {} --gameDir %s --assetsDir %s/assets --assetIndex %s --width 800 --height 600", java_buffer, mc_gamedir, mc_gamedir, mc_class, mc_username, mc_version, mc_gamedir, mc_gamedir, mc_version);
   /* printf("JAVA COMMAND: %s\n", java_buffer); */
   system(java_buffer);
 }
@@ -71,15 +71,17 @@ initialise_game(LogDisplay* log_display)
   log_message(log_display, "Downloading JOPT_SIMPLE library...\n");
   download_libraries((Library)JOPT_SIMPLE, "4.6");
   log_message(log_display, "Downloading LOG4J_CORE library...\n");
-  download_libraries((Library)LOG4J_CORE, "2.17.2");
+  download_libraries((Library)LOG4J_CORE, "2.7");
   log_message(log_display, "Downloading LOG4J_API library...\n");
-  download_libraries((Library)LOG4J_API, "2.17.2");
+  download_libraries((Library)LOG4J_API, "2.7");
   log_message(log_display, "Downloading PAULSCODE_CODECJORBIS library...\n");
   download_libraries((Library)PAULSCODE_CODECJORBIS, "20101023");
+  log_message(log_display, "Downloading PAULSCODE_CODECWAV library...\n");
+  download_libraries((Library)PAULSCODE_CODECWAV, "20101023");
   log_message(log_display, "Downloading PAULSCODE_JAVA_SOUND library...\n");
   download_libraries((Library)PAULSCODE_JAVA_SOUND, "20101123");
   log_message(log_display, "Downloading PAULSCODE_LWJGL_OPENAL library...\n");
-  download_libraries((Library)PAULSCODE_LWJGL_OPENAL, "0.0.1");
+  download_libraries((Library)PAULSCODE_LWJGL_OPENAL, "20100824");
   log_message(log_display, "Downloading PAULSCODE_SOUND_SYSTEM library...\n");
   download_libraries((Library)PAULSCODE_SOUND_SYSTEM, "20120107");
   log_message(log_display, "Downloading NETTY_AIO library...\n\n");
