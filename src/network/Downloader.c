@@ -3,8 +3,9 @@
 #include <string.h>
 #include <curl/curl.h>
 
-#include "settings.h"
-#include "Downloader.h"
+#include "data/settings.h"
+#include "data/Downloader.h"
+
 #include "FileManager.h"
 #include "Internet.h"
 

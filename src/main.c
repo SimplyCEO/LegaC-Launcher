@@ -1,5 +1,6 @@
+#include "data/settings.h"
+
 #include "game.h"
-#include "settings.h"
 #include "Application.h"
 
 MinecraftSettings mc = {{1,9,0},"",{{0},{'.','/','a','s','s','e','t','s'}}};

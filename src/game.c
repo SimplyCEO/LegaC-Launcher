@@ -1,10 +1,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "data/settings.h"
+#include "data/Downloader.h"
+
 #include "args.h"
 #include "game.h"
-#include "settings.h"
-#include "Downloader.h"
 
 void
 play_game(const char* mc_version, const char* mc_username, const char* mc_gamedir, const char* mc_class)

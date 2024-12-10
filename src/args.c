@@ -2,7 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "Application.h"
+#include "data/Application.h"
+
 #include "Downloader.h"
 
 static struct GameType

@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "data/Application.h"
 
 /* Quit the application after main window destroy. */
 void

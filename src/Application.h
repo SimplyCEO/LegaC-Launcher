@@ -1,18 +1,7 @@
 #ifndef APPLICATION_HEADER
 #define APPLICATION_HEADER
 
-#include <gtk/gtk.h>
-
-static struct ApplicationDefinition
-{ char* name;
-  char* version;
-} application = { "LegaC Launcher", "v0.0.2" };
-
-typedef struct
-{ GtkWidget *text_view;
-  GAsyncQueue *queue;
-  guint source_id;
-} LogDisplay;
+#include "data/Application.h"
 
 GtkWidget*  _A_Box_Create(GtkWidget* container, GtkOrientation orientation);
 void        _A_Box_Resize(GtkWidget* box, int size_x, int size_y);
