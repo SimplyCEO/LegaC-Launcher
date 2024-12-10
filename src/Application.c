@@ -78,8 +78,10 @@ _A_Text_Logger(GtkWidget* widget)
   return log_display;
 }
 
+unsigned char isMainWindowCreated = 0;
 /* CApplication.Window.Create:
- * Create window widget based on name, size, and position. */
+ * Create window widget based on name, size, and position.
+ * First window will be treated as main window. */
 GtkWidget*
 _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)
 {
@@ -91,7 +93,10 @@ _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosit
   gtk_container_set_border_width(GTK_CONTAINER(window), 8);
 
   /* Destroy window after quitting application. */  
-  g_signal_connect(window, "destroy", G_CALLBACK(on_window_destroy), NULL);
+  if (isMainWindowCreated == 0)
+  { g_signal_connect(window, "destroy", G_CALLBACK(on_window_destroy), NULL);
+    isMainWindowCreated = 1;
+  }
 
   return window;
 }
