@@ -35,18 +35,53 @@ update_progress_bar(gpointer progress_bar)
   { gtk_widget_destroy(GTK_WIDGET(progress_bar)); }
 }
 
+unsigned char
+download_library(Library library)
+{
+  char* version = NULL;
+
+  switch (library)
+  {
+    case LWJGL:                   version = "2.9.3";            break;
+    case AUTHLIB:                 version = "1.5.25";           break;
+    case APACHE_COMMONS_IO:       version = "2.5";              break;
+    case APACHE_COMMONS_LANG3:    version = "3.12.0";           break;
+    case GSON:                    version = "2.7";              break;
+    case GUAVA:                   version = "19.0";             break;
+    case ICU4J:                   version = "65.1";             break;
+    case JOPT_SIMPLE:             version = "4.6";              break;
+    case LOG4J_CORE:              version = "2.0-beta9-fixed";  break;
+    case LOG4J_API:               version = "2.0-beta9-fixed";  break;
+    case PAULSCODE_CODECJORBIS:   version = "20101023";         break;
+    case PAULSCODE_CODECWAV:      version = "20101023";         break;
+    case PAULSCODE_JAVA_SOUND:    version = "20101123";         break;
+    case PAULSCODE_LWJGL_OPENAL:  version = "20100824";         break;
+    case PAULSCODE_SOUND_SYSTEM:  version = "20120107";         break;
+    case NETTY_AIO:               version = "4.0.56.Final";     break;
+    default: fprintf(stderr, "Unknown library.\n"); return 1;
+  }
+
+  download_libraries(library, version);
+  dl_current++;
+
+  return 0;
+}
+
 void
 initialise_game(gpointer data)
 {
   LogDisplay* log_display = (LogDisplay*)data;
 
   /* Build game configuration */
+
+  /* Version string */
   char mc_version[12] = {0};
   if (mc.version.patch > 0)
   { sprintf(mc_version, "%hhu.%hhu.%hhu", mc.version.major, mc.version.minor, mc.version.patch); }
   else
   { sprintf(mc_version, "%hhu.%hhu", mc.version.major, mc.version.minor); }
 
+  /* Username string default to `LegaC_user` */
   char mc_username[16] = {0};
   if (mc.username[0] != '\0')
   { strncpy(mc_username, mc.username, 16); }
@@ -55,17 +90,17 @@ initialise_game(gpointer data)
     strcpy(mc.username, mc_username);
   }
 
+  /* instances/VERSION/minecraft game directory */
   char mc_gamedir[128] = {0};
   sprintf(mc_gamedir, "./instances/%s/minecraft", mc_version);
   strcpy(mc.directory.game, mc_gamedir);
 
+  /* Necessary class name */
   char mc_class[32] = {0};
   if ((mc.version.major == 1) & (mc.version.minor > 5))
   { strcpy(mc_class, "net.minecraft.client.main.Main"); }
   else
   { strcpy(mc_class, "net.minecraft.client.Minecraft"); }
-
-  /* printf("Strings: %s %s %s %s\n", mc_version, mc_username, mc_gamedir, mc_class); */
 
   /* Start progress bar */
   dl_total = (Library)LIBRARY_LAST-1;
@@ -80,69 +115,9 @@ initialise_game(gpointer data)
   download_game(mc_version, 1);
   dl_current++;
 
-  log_message(log_display, "Downloading LWJGL library...\n");
-  download_libraries((Library)LWJGL, "2.9.3");
-  dl_current++;
-
-  log_message(log_display, "Downloading AUTHLIB library...\n");
-  download_libraries((Library)AUTHLIB, "1.5.25");
-  dl_current++;
-
-  log_message(log_display, "Downloading APACHE_COMMONS_IO library...\n");
-  download_libraries((Library)APACHE_COMMONS_IO, "2.5");
-  dl_current++;
-
-  log_message(log_display, "Downloading APACHE_COMMONS_LANG3 library...\n");
-  download_libraries((Library)APACHE_COMMONS_LANG3, "3.12.0");
-  dl_current++;
-
-  log_message(log_display, "Downloading GSON library...\n");
-  download_libraries((Library)GSON, "2.7");
-  dl_current++;
-
-  log_message(log_display, "Downloading GUAVA library...\n");
-  download_libraries((Library)GUAVA, "19.0");
-  dl_current++;
-
-  log_message(log_display, "Downloading ICU4J library...\n");
-  download_libraries((Library)ICU4J, "65.1");
-  dl_current++;
-
-  log_message(log_display, "Downloading JOPT_SIMPLE library...\n");
-  download_libraries((Library)JOPT_SIMPLE, "4.6");
-  dl_current++;
-
-  log_message(log_display, "Downloading LOG4J_CORE library...\n");
-  download_libraries((Library)LOG4J_CORE, "2.0-beta9-fixed");
-  dl_current++;
-
-  log_message(log_display, "Downloading LOG4J_API library...\n");
-  download_libraries((Library)LOG4J_API, "2.0-beta9-fixed");
-  dl_current++;
-
-  log_message(log_display, "Downloading PAULSCODE_CODECJORBIS library...\n");
-  download_libraries((Library)PAULSCODE_CODECJORBIS, "20101023");
-  dl_current++;
-
-  log_message(log_display, "Downloading PAULSCODE_CODECWAV library...\n");
-  download_libraries((Library)PAULSCODE_CODECWAV, "20101023");
-  dl_current++;
-
-  log_message(log_display, "Downloading PAULSCODE_JAVA_SOUND library...\n");
-  download_libraries((Library)PAULSCODE_JAVA_SOUND, "20101123");
-  dl_current++;
-
-  log_message(log_display, "Downloading PAULSCODE_LWJGL_OPENAL library...\n");
-  download_libraries((Library)PAULSCODE_LWJGL_OPENAL, "20100824");
-  dl_current++;
-
-  log_message(log_display, "Downloading PAULSCODE_SOUND_SYSTEM library...\n");
-  download_libraries((Library)PAULSCODE_SOUND_SYSTEM, "20120107");
-  dl_current++;
-
-  log_message(log_display, "Downloading NETTY_AIO library...\n\n");
-  download_libraries((Library)NETTY_AIO, "4.0.56.Final");
-  dl_current++;
+  unsigned char i = 0;
+  for (i=0; i<=(int)dl_total; i++)
+  { download_library((Library)i); }
 
   log_message(log_display, "Starting Minecraft game...\n");
   gtk_widget_destroy(GTK_WIDGET(progress_window));
