@@ -29,7 +29,7 @@ else
 	CFLAGS += -O0 -g3 -ggdb -Wall
 endif
 
-CFLAGS += $(shell pkg-config --cflags gtk+-3.0)
+CFLAGS += $(shell pkg-config --cflags gtk+-3.0 webkit2gtk-4.0)
 
 ESCAPE        := \033
 RED           := $(ESCAPE)[31m
@@ -52,7 +52,7 @@ SRC_DIR       := $(PWD)/src
 BIN_DIR       := $(PWD)/bin
 DIRS          := bin .obj .obj/network .obj/util
 HEADERS       := -I./src -I./src/network -I./src/util
-LIBRARIES     := $(shell pkg-config --libs gtk+-3.0) -lcurl
+LIBRARIES     := $(shell pkg-config --libs gtk+-3.0 webkit2gtk-4.0) -lcurl
 
 ifndef MINGW_CHOST
 	LIBRARIES   +=
