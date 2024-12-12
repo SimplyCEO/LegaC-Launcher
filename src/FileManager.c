@@ -238,3 +238,28 @@ _FM_Flush(int fd)
   file[fd].txt = 0;
 }
 
+char*
+_FM_ReadFile(int fd)
+{
+  _FM_Seek(fd, 0, SEEK_END);
+
+  long file_size = ftell(file[fd].stream);
+  rewind(file[fd].stream);
+
+  char* content = malloc(file_size+1);
+  fread(content, file_size, 1, file[fd].stream);
+  content[file_size] = '\0';
+
+  return content;
+}
+
+char*
+_FM_ReadFileFromPath(const char* filepath)
+{
+  int fd = _FM_OpenFile(filepath, "r");
+  char* content = _FM_ReadFile(fd);
+  _FM_CloseFile(fd);
+
+  return content;
+}
+
