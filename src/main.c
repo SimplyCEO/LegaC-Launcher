@@ -42,7 +42,7 @@ on_username_changed(GtkWidget *widget, gpointer data)
 }
 
 void
-on_play_clicked (GtkWidget *widget, LogDisplay* log_display)
+onLogWindow(GtkWidget* widget, LogDisplay* log_display)
 {
   GtkTextBuffer *buffer;
   GtkTextIter start_iter, end_iter;
@@ -55,8 +55,12 @@ on_play_clicked (GtkWidget *widget, LogDisplay* log_display)
   while ((message = g_async_queue_try_pop(log_display->queue)))
   { g_free(message); }
 
-  GThread* thread = g_thread_new("initialise_game", (GThreadFunc)initialise_game, log_display);
+  /* GThread* thread = g_thread_new("gameLogWindow", (GThreadFunc)gameLogWindow, log_display); */
 }
+
+void
+on_play_clicked(GtkWidget *widget, LogDisplay* log_display)
+{ GThread* thread = g_thread_new("initialise_game", (GThreadFunc)initialise_game, NULL); }
 
 int
 main(int argc, char* argv[])
@@ -86,7 +90,17 @@ main(int argc, char* argv[])
   vbox  = CApplication.Box.Create(window, GTK_ORIENTATION_VERTICAL);
 
   /* Info logger */
-  logger = CApplication.Text.Logger(vbox);
+  /* logger = CApplication.Text.Logger(vbox); */
+
+  /* Old Minecraft news */
+  WebKitWebView* web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+  gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(web_view), TRUE, TRUE, 0);
+  /* Load a local HTML file */
+  /*
+  const char *file_path = "./assets/launcher_news.html";
+  webkit_web_view_load_file(web_view, file_path);
+  */
+  webkit_web_view_load_uri(web_view, "https://mcupdate.tumblr.com");
 
   /* Docker container */
   hbox = CApplication.Box.Create(window, GTK_ORIENTATION_HORIZONTAL);
@@ -124,7 +138,7 @@ main(int argc, char* argv[])
   CApplication.Box.Resize(play_button, 210, 70);
   gtk_box_pack_start(GTK_BOX(hbox), play_button, TRUE, FALSE, 3);
   gtk_widget_set_halign(play_button, GTK_ALIGN_CENTER);
-  g_signal_connect(play_button, "clicked", G_CALLBACK(on_play_clicked), logger);
+  g_signal_connect(play_button, "clicked", G_CALLBACK(on_play_clicked), NULL);
 
   /* User profile and help */
   infobox = CApplication.Box.Create(hbox, GTK_ORIENTATION_VERTICAL);

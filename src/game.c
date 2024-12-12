@@ -68,10 +68,17 @@ download_library(Library library)
 }
 
 void
-initialise_game(gpointer data)
+gameLogWindow(gpointer data)
 {
   LogDisplay* log_display = (LogDisplay*)data;
 
+  log_message(log_display, "Starting Minecraft game...\n");
+  /* TODO */
+}
+
+void
+initialise_game(gpointer data)
+{
   /* Build game configuration */
 
   /* Version string */
@@ -111,7 +118,6 @@ initialise_game(gpointer data)
   g_idle_add((GSourceFunc)update_progress_bar, progress_bar);
 
   /* Download dependencies and run game */
-  log_message(log_display, "Downloading Minecraft game...\n");
   download_game(mc_version, 1);
   dl_current++;
 
@@ -119,7 +125,6 @@ initialise_game(gpointer data)
   for (i=0; i<=(int)dl_total; i++)
   { download_library((Library)i); }
 
-  log_message(log_display, "Starting Minecraft game...\n");
   gtk_widget_destroy(GTK_WIDGET(progress_window));
 
   play_game(mc_version, mc_username, mc_gamedir, mc_class);
