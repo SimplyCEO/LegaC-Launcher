@@ -8,25 +8,21 @@ endif
 # CORE OPTIONAL (compiler flags)
 
 ifndef CFLAGS
-	CFLAGS :=
-endif
+	ifndef BUILD_TYPE
+		BUILD_TYPE = Debug
+	endif
 
-# ACTION definitions
+	ifeq ($(CC), tcc)
+		CFLAGS += -std=c99
+	else
+		CFLAGS += --std=c99
+	endif
 
-ifndef BUILD_TYPE
-	BUILD_TYPE = Debug
-endif
-
-ifeq ($(CC), tcc)
-	CFLAGS += -std=c99
-else
-	CFLAGS += --std=c99
-endif
-
-ifeq ($(BUILD_TYPE), Release)
-	CFLAGS += -O2
-else
-	CFLAGS += -O0 -g3 -ggdb -Wall
+	ifeq ($(BUILD_TYPE), Release)
+		CFLAGS += -O2
+	else ifeq ($(BUILD_TYPE), Debug)
+		CFLAGS += -O0 -g3 -ggdb -Wall
+	endif
 endif
 
 CFLAGS += $(shell pkg-config --cflags gtk+-3.0 webkit2gtk-4.0)
