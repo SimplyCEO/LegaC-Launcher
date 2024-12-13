@@ -4,7 +4,7 @@ LegaC Launcher
 A Minecraft launcher made with GTK and Curl in pure C.
 
 The main goal is to provide the old looking style of the Minecraft launcher,
-while mainting new features that modern launchers have.
+while maintaining new features that modern launchers have.
 
 Usage
 -----
@@ -18,6 +18,10 @@ bin/legac_launcher
 ```
 Or just open `legac_launcher` located inside `bin` folder.
 
+To avoid overwritting your `CFLAGS` use `make BUILD_TYPE=Custom`.
+
+At the moment it is not recommended to install on system. Just run locally until the stable version comes out.
+
 TODO
 ----
 
@@ -29,5 +33,6 @@ Why? Because it took me almost an entire week to understand how all of this work
 The initial code given here works as intended, but not how it should be... there
 WILL be more work to do.
 
-Until then, this might be the first open source Minecraft launcher available in C.
+This is the first open source Minecraft launcher available in C.
+And hopefully, at the end of the development version, occur a stable in ANSI C.
 
