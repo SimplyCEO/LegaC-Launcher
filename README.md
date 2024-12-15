@@ -36,3 +36,10 @@ WILL be more work to do.
 This is the first open source Minecraft launcher available in C.
 And hopefully, at the end of the development version, occur a stable in ANSI C.
 
+Gallery
+-------
+
+<p align="left">
+  <img src="./.media/screenshots/SCR_2024-12-14_22-15-01.jpeg" width="384" title="LegaC Launcher v0.0.4">
+</p>
+
