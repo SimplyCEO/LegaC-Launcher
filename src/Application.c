@@ -90,7 +90,7 @@ _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosit
   gtk_window_set_title(GTK_WINDOW(window), window_name);
   gtk_window_set_default_size(GTK_WINDOW(window), size_x, size_y);
   gtk_window_set_position(GTK_WINDOW(window), window_position);
-  gtk_container_set_border_width(GTK_CONTAINER(window), 8);
+  gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 
   /* Destroy window after quitting application. */  
   if (isMainWindowCreated == 0)
