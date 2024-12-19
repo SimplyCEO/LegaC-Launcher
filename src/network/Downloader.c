@@ -13,7 +13,7 @@
 #define MAX_URL_LENGTH 200
 #define MAX_PATH_LENGTH 64
 
-char*
+static char*
 extract_response_url(const char *data)
 {
   int i = 0, b = 0;

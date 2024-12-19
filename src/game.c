@@ -11,7 +11,7 @@
 char* progress_label_text = "Preparing to download...";
 GtkWidget* progress_label;
 
-void
+static void
 play_game(const char* mc_version, const char* mc_username, const char* mc_gamedir, const char* mc_class)
 {
   char java_buffer[2048] = {0};
@@ -24,12 +24,12 @@ play_game(const char* mc_version, const char* mc_username, const char* mc_gamedi
   system(java_buffer);
 }
 
-void
+static void
 log_message(LogDisplay *logger, const gchar *message)
 { g_async_queue_push(logger->queue, g_strdup(message)); }
 
 gint dl_total = 0, dl_current = 0;
-void
+static void
 update_progress_bar(gpointer progress_bar)
 {
   gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), (gdouble) dl_current / dl_total);
@@ -39,7 +39,7 @@ update_progress_bar(gpointer progress_bar)
   { gtk_widget_destroy(GTK_WIDGET(progress_bar)); }
 }
 
-unsigned char
+static unsigned char
 download_library(Library library)
 {
   char* version = NULL;

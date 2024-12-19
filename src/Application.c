@@ -1,17 +1,15 @@
 #include "data/Application.h"
 
-/* Quit the application after main window destroy. */
-void
+static void
 on_window_destroy(GtkWidget *widget, gpointer data)
 { gtk_main_quit(); }
 
-/* Resize the widget with X/Y scale. */
-void
+static void
 set_widget_size(GtkWidget* widget, int size_x, int size_y)
 { gtk_widget_set_size_request(widget, size_x, size_y); }
 
-/* Process the log messages in the queue. */
-gboolean process_log_messages(LogDisplay *log_display)
+static gboolean
+process_log_messages(LogDisplay *log_display)
 {
   gchar *message;
   GtkTextBuffer *buffer;
@@ -27,9 +25,6 @@ gboolean process_log_messages(LogDisplay *log_display)
   return TRUE;
 }
 
-
-/* CApplication.Box.Create:
- * Create a box widget, child of a container, with the desired orientation. */
 GtkWidget*
 _A_Box_Create(GtkWidget* container, GtkOrientation orientation)
 {
@@ -40,18 +35,12 @@ _A_Box_Create(GtkWidget* container, GtkOrientation orientation)
   return box;
 }
 
-/* CApplication.Box.Resize
- * Resize a box widget with given position. */
 void
 _A_Box_Resize(GtkWidget* box, int size_x, int size_y)
 {
   set_widget_size(box, size_x, size_y);
 }
 
-
-
-/* CApplication.Text.Logger
- * Create a read-only log box. */
 LogDisplay*
 _A_Text_Logger(GtkWidget* widget)
 {
@@ -79,9 +68,6 @@ _A_Text_Logger(GtkWidget* widget)
 }
 
 unsigned char isMainWindowCreated = 0;
-/* CApplication.Window.Create:
- * Create window widget based on name, size, and position.
- * First window will be treated as main window. */
 GtkWidget*
 _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)
 {
@@ -101,8 +87,6 @@ _A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosit
   return window;
 }
 
-/* CApplication.Window.SetIcon:
- * Set the application icon. */
 void
 _A_Window_SetIcon(GtkWidget* window, const char* filepath)
 {
@@ -111,8 +95,6 @@ _A_Window_SetIcon(GtkWidget* window, const char* filepath)
   g_object_unref(icon);
 }
 
-/* CApplication.Window.SetIcon:
- * Set the background image, forcing the size to 96x96. */
 void
 _A_Window_SetBackground(GtkWidget* window, const char* filepath)
 {
@@ -128,26 +110,18 @@ _A_Window_SetBackground(GtkWidget* window, const char* filepath)
   g_object_unref(provider);
 }
 
-/* CApplication.Window.Resize
- * Resize a box widget with given position. */
 void
 _A_Window_Resize(GtkWidget* window, int size_x, int size_y)
 {
   set_widget_size(window, size_x, size_y);
 }
 
-
-
-/* CApplication.Initialise:
- * Start GTK application. */
 void
 _A_Initialise(int argc, char* argv[])
 {
   gtk_init(&argc, &argv);
 }
 
-/* CApplication.Loop:
- * Avoid closing the application while main window is still running. */
 void
 _A_Loop(void)
 {

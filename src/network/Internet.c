@@ -4,7 +4,7 @@
 
 #include "FileManager.h"
 
-int
+static int
 write_data(void* contents, int size, int nmemb, FILE* file)
 {
   if (file == NULL)

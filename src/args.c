@@ -15,7 +15,7 @@ static struct GameType
 unsigned char force_overwrite = 0,
               type_assign = 0, args = 0;
 
-void
+static void
 help()
 {
   printf("%s - %s: A Minecraft launcher made in C from scratch.\n", application.name, application.version);
