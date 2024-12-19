@@ -23,6 +23,8 @@ ifndef CFLAGS
 	else ifeq ($(BUILD_TYPE), Debug)
 		CFLAGS += -O0 -g3 -ggdb -Wall
 	endif
+
+	CFLAGS += -Wno-typedef-redefinition
 endif
 
 CFLAGS += $(shell pkg-config --cflags gtk+-3.0 webkit2gtk-4.0)
@@ -71,7 +73,7 @@ all: directories $(TARGETS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "[CC] ""$(GREEN)""Building object '$<'""$(RESET_COLOUR)""\n"
-	@$(CC) $(CFLAGS) $(LIBRARIES) $(HEADERS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 $(TARGETS): $(OBJECTS)
 	@printf "[BIN] ""$(BOLD_GREEN)""Linking binary '$@'""$(RESET_COLOUR)""\n"
