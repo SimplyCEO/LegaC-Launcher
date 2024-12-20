@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=LegaC Launcher
+Exec=legac_launcher
+Icon=legac_launcher_icon
+Terminal=false
+Type=Application
+Categories=Game;
+GenericName=LegaC Launcher
