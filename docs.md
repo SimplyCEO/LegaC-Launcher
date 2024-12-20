@@ -291,6 +291,10 @@ Public
   Copy contents of `fd1` to `fd2`.<br>
   Return type: `void`.
 
+- `CopyFromPath(const char* filepath1, const char* filepath2)`:<br>
+  Same as `Copy`, but instead uses a <b>file path</b>.<br>
+  Return type: `void`.
+
 - `Flush(int fd)`:<br>
   Empty file position in <b>file array</b> and remove it from system.<br>
   Return type: `void`.

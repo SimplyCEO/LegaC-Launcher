@@ -230,6 +230,26 @@ _FM_Copy(int fd1, int fd2)
 }
 
 void
+_FM_CopyFromPath(const char* filepath1, const char* filepath2)
+{
+  int fd1 = _FM_OpenFile(filepath1, "r");
+  if (fd1 == 0)
+  { fprintf(stderr, "Could not open '%s' path of file.", filepath1);
+    _FM_CloseFile(fd1);
+    return;
+  }
+
+  int fd2 = _FM_OpenFile(filepath2, "w");
+
+  int c = 0;
+  while ((c = fgetc(file[fd1].stream)) != EOF)
+  { fputc(c, file[fd2].stream); }
+
+  _FM_CloseFile(fd1);
+  _FM_CloseFile(fd2);
+}
+
+void
 _FM_Flush(int fd)
 {
   _fclose(fd);

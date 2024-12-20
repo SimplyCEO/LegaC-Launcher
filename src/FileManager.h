@@ -11,6 +11,7 @@ int           _FM_CloseFile(int fd);
 int           _FM_GetError(int fd);
 FILE*         _FM_Stream(int fd);
 void          _FM_Copy(int fd1, int fd2);
+void          _FM_CopyFromPath(const char* filepath1, const char* filepath2);
 void          _FM_Flush(int fd);
 char*         _FM_ReadFile(int fd);
 char*         _FM_ReadFileFromPath(const char* filepath);
@@ -27,16 +28,17 @@ static struct FileManagerClass
   int           (*GetError)(int fd);
   FILE*         (*Stream)(int fd);
   void          (*Copy)(int fd1, int fd2);
+  void          (*CopyFromPath)(const char* filepath1, const char* filepath2);
   void          (*Flush)(int fd);
   char*         (*ReadFile)(int fd);
   char*         (*ReadFileFromPath)(const char* filepath);
 }
 CFileManager =
 {
-  _FM_Validate,   _FM_OpenFile, _FM_Read,
-  _FM_Write,      _FM_Seek,     _FM_ReadLine,
-  _FM_CloseFile,  _FM_GetError, _FM_Stream,
-  _FM_Copy,       _FM_Flush,
+  _FM_Validate,   _FM_OpenFile,     _FM_Read,
+  _FM_Write,      _FM_Seek,         _FM_ReadLine,
+  _FM_CloseFile,  _FM_GetError,     _FM_Stream,
+  _FM_Copy,       _FM_CopyFromPath, _FM_Flush,
   _FM_ReadFile,   _FM_ReadFileFromPath
 };
 
