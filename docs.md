@@ -19,6 +19,7 @@ typedef struct
 
 static struct ApplicationDefinition
 {
+  char* path;
   char* name;
   char* icon;
   char* background;

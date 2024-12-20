@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "data/settings.h"
+#include "data/Application.h"
 #include "data/Downloader.h"
 
 #include "args.h"
@@ -103,7 +104,7 @@ initialise_game(gpointer data)
 
   /* instances/VERSION/minecraft game directory */
   char mc_gamedir[128] = {0};
-  sprintf(mc_gamedir, "./instances/%s/minecraft", mc_version);
+  sprintf(mc_gamedir, "%s/instances/%s/minecraft", application.path, mc_version);
   strcpy(mc.directory.game, mc_gamedir);
 
   /* Necessary class name */

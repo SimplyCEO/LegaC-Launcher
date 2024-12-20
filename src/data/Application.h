@@ -5,23 +5,20 @@
 #include <webkit2/webkit2.h>
 
 typedef struct
-{ char* html;
+{ char html[128];
   char* url;
 } Page;
 
-static struct ApplicationDefinition
-{ char* name;
-  char* icon;
-  char* background;
+typedef struct
+{ char path[1024];
+  char* name;
+  char icon[128];
+  char background[128];
   char* version;
   Page  news;
   Page  help;
-} application =
-{
-  "LegaC Launcher", "./assets/icon.png", "./assets/background.png", "v0.0.4",
-  { "./assets/news.html", "https://mcupdate.tumblr.com" },
-  { "./assets/help.html", "https://gitlab.com/SimplyCEO/LegaC-Launcher/-/issues" }
-};
+} ApplicationData;
+extern ApplicationData application;
 
 typedef struct
 { GtkWidget *text_view;

@@ -14,6 +14,7 @@ To install it is really simple. Clone, enter, make, run, rage.
 git clone https://gitlab.com/SimplyCEO/LegaC-Launcher.git
 cd LegaC-Launcher
 make BUILD_TYPE=Release
+mkdir -p "${HOME}/.local/share/legac_launcher" && cp -r ./assets "${HOME}/.local/share/legac_launcher"
 bin/legac_launcher
 ```
 Or just open `legac_launcher` located inside `bin` folder.

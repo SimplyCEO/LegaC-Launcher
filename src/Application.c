@@ -1,4 +1,15 @@
+#include <stdlib.h>
+
 #include "data/Application.h"
+
+#include "FileManager.h"
+
+ApplicationData application =
+{
+  {0}, "LegaC Launcher", {0}, {0}, "v0.0.6",
+  { {0}, "https://mcupdate.tumblr.com" },
+  { {0}, "https://gitlab.com/SimplyCEO/LegaC-Launcher/-/issues" }
+};
 
 static void
 on_window_destroy(GtkWidget *widget, gpointer data)
@@ -126,5 +137,51 @@ void
 _A_Loop(void)
 {
   gtk_main();
+}
+
+void
+_A_SetupPath(void)
+{
+  char* user = NULL;
+  user = getenv("HOME");
+
+  char* path = malloc(strlen(user)+29+1);
+  strcpy(path, user);
+  strcat(path, "/.local/share/legac_launcher");
+
+  char* system_cmd = malloc(strlen(path)+strlen("mkdir -p ")+strlen("/assets")+1);
+  strcpy(system_cmd, "mkdir -p ");
+  strcat(system_cmd, path);
+  strcat(system_cmd, "/assets");
+  system(system_cmd);
+  free(system_cmd);
+
+  strcpy(application.path, path);
+
+  char* icon_path = malloc(strlen(path)+strlen("/assets/icon.png")+1);
+  strcpy(icon_path, path);
+  strcat(icon_path, "/assets/icon.png");
+  strcpy(application.icon, icon_path);
+  free(icon_path);
+
+  char* background_path = malloc(strlen(path)+strlen("/assets/background.png")+1);
+  strcpy(background_path, path);
+  strcat(background_path, "/assets/background.png");
+  strcpy(application.background, background_path);
+  free(background_path);
+
+  char* news_path = malloc(strlen(path)+strlen("/assets/news.html")+1);
+  strcpy(news_path, path);
+  strcat(news_path, "/assets/news.html");
+  strcpy(application.news.html, news_path);
+  free(news_path);
+
+  char* help_path = malloc(strlen(path)+strlen("/assets/help.html")+1);
+  strcpy(help_path, path);
+  strcat(help_path, "/assets/help.html");
+  strcpy(application.help.html, help_path);
+  free(help_path);
+
+  free(path);
 }
 

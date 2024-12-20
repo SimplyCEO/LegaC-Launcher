@@ -15,6 +15,7 @@ void        _A_Window_SetBackground(GtkWidget* window, const char* filepath);
 
 void        _A_Initialise(int argc, char* argv[]);
 void        _A_Loop(void);
+void        _A_SetupPath(void);
 
 static struct ApplicationClass
 { struct BoxWidget
@@ -32,12 +33,13 @@ static struct ApplicationClass
   } Window;
   void (*Initialise)(int argc, char* argv[]);
   void (*Loop)(void);
+  void (*SetupPath)(void);
 }
 CApplication =
 { { _A_Box_Create,    _A_Box_Resize    },
   { _A_Text_Logger                     },
   { _A_Window_Create, _A_Window_Resize, _A_Window_SetIcon, _A_Window_SetBackground },
-    _A_Initialise,    _A_Loop
+    _A_Initialise,    _A_Loop,          _A_SetupPath
 };
 
 #endif

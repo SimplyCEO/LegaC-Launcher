@@ -4,6 +4,7 @@
 #include <curl/curl.h>
 
 #include "data/settings.h"
+#include "data/Application.h"
 #include "data/Downloader.h"
 
 #include "FileManager.h"
@@ -185,7 +186,7 @@ _D_FindLibrary(Library library, const char* version)
     } break;
     default: fprintf(stderr, "Not a valid library.\n"); return;
   }
-  sprintf(dir, "./libraries/%s/%s", file.class, version);
+  sprintf(dir, "%s/libraries/%s/%s",application.path, file.class, version);
   sprintf(file.fullname, "%s-%s.%s", file.name, version, file.ext);
   sprintf(file.path, "%s/%s", dir, file.fullname);
 

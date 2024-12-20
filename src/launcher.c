@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "data/settings.h"
+#include "data/Application.h"
 
 #include "game.h"
 #include "Application.h"
@@ -191,6 +192,7 @@ void
 startApplication(int argc, char** argv)
 {
   CApplication.Initialise(argc, argv);
+  CApplication.SetupPath();
 
   /* TODO: Identify the size of the monitor to display a good resolution. */
   InitialiseWindow(application.name, application.icon, application.background, 800, 600, GTK_WIN_POS_CENTER);
