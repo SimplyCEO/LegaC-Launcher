@@ -5,6 +5,18 @@
 #include <webkit2/webkit2.h>
 
 typedef struct
+{ int x;
+  int y;
+} ApplicationWindowSize;
+
+typedef struct
+{ unsigned short xms;
+  unsigned short xmx;
+  char extra_arguments[2048];
+  ApplicationWindowSize size;
+} ApplicationSettings;
+
+typedef struct
 { char html[128];
   char* url;
 } Page;
@@ -15,6 +27,7 @@ typedef struct
   char icon[128];
   char background[128];
   char* version;
+  ApplicationSettings settings;
   Page  news;
   Page  help;
 } ApplicationData;

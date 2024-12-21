@@ -10,26 +10,49 @@
 #include "Application.h"
 
 char* progress_label_text = "Preparing to download...";
-GtkWidget* progress_label;
+GtkWidget* progress_label = NULL;
+
+gint dl_total = 0;
+gint dl_current = 0;
 
 static void
 play_game(const char* mc_version, const char* mc_username, const char* mc_gamedir, const char* mc_class)
 {
-  char java_buffer[2048] = {0};
-  sprintf(java_buffer, "java -Xms128M -Xmx1024M");
-  #if !defined(_WIN32)
-    sprintf(java_buffer, "%s -Dorg.lwjgl.openal.libname=/lib/libopenal.so", java_buffer);
-  #endif
-  sprintf(java_buffer, "%s -Djava.library.path='%s/bin/natives' -cp '%s/bin/*' %s --username %s --version %s --accessToken 0 --userProperties {} --gameDir %s --assetsDir %s/assets --assetIndex %s --width 800 --height 600", java_buffer, mc_gamedir, mc_gamedir, mc_class, mc_username, mc_version, mc_gamedir, mc_gamedir, mc_version);
-  /* printf("JAVA COMMAND: %s\n", java_buffer); */
+  unsigned int s_total = snprintf(
+    NULL,
+    0,
+    "java \
+    -Xms%dM -Xmx%dM \
+    -Djava.library.path='%s/bin/natives' \
+    %s \
+    -cp '%s/bin/*' %s\
+    --username %s --version %s \
+    --accessToken 0 --userProperties {} \
+    --gameDir %s --assetsDir %s/assets --assetIndex %s \
+    --width %d --height %d",
+    application.settings.xms, application.settings.xmx,
+    mc_gamedir,
+    application.settings.extra_arguments,
+    mc_gamedir, mc_class,
+    mc_username, mc_version,
+    mc_gamedir, mc_gamedir, mc_version,
+    application.settings.size.x, application.settings.size.y
+  );
+
+  char* java_buffer = malloc(s_total+1);
+  if (java_buffer == NULL)
+  { fprintf(stderr, "Could not allocate sufficient memory for JavaVM script.\n"); return; }
+
+  snprintf(java_buffer, s_total+1, "java -Xms%dM -Xmx%dM -Djava.library.path='%s/bin/natives' %s -cp '%s/bin/*' %s --username %s --version %s --accessToken 0 --userProperties {} --gameDir %s --assetsDir %s/assets --assetIndex %s --width %d --height %d", application.settings.xms, application.settings.xmx, mc_gamedir, application.settings.extra_arguments, mc_gamedir, mc_class, mc_username, mc_version, mc_gamedir, mc_gamedir, mc_version, application.settings.size.x, application.settings.size.y);
+
   system(java_buffer);
+  free(java_buffer);
 }
 
 static void
 log_message(LogDisplay *logger, const gchar *message)
 { g_async_queue_push(logger->queue, g_strdup(message)); }
 
-gint dl_total = 0, dl_current = 0;
 static void
 update_progress_bar(gpointer progress_bar)
 {

@@ -6,7 +6,8 @@
 
 ApplicationData application =
 {
-  {0}, "LegaC Launcher", {0}, {0}, "v0.0.6",
+  {0}, "LegaC Launcher", {0}, {0}, "v0.0.7",
+  { 128, 1024, {0}, { 800, 600 } },
   { {0}, "https://mcupdate.tumblr.com" },
   { {0}, "https://gitlab.com/SimplyCEO/LegaC-Launcher/-/issues" }
 };

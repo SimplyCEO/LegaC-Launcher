@@ -12,25 +12,36 @@ Data
 
 ```c
 typedef struct
-{
-  char* html;
+{ int x;
+  int y;
+} ApplicationWindowSize;
+
+typedef struct
+{ unsigned short xms;
+  unsigned short xmx;
+  char extra_arguments[2048];
+  ApplicationWindowSize size;
+} ApplicationSettings;
+
+typedef struct
+{ char html[128];
   char* url;
 } Page;
 
-static struct ApplicationDefinition
-{
-  char* path;
+typedef struct
+{ char path[1024];
   char* name;
-  char* icon;
-  char* background;
+  char icon[128];
+  char background[128];
   char* version;
+  ApplicationSettings settings;
   Page  news;
   Page  help;
-} application;
+} ApplicationData;
+extern ApplicationData application;
 
 typedef struct
-{
-  GtkWidget *text_view;
+{ GtkWidget *text_view;
   GAsyncQueue *queue;
   guint source_id;
 } LogDisplay;
@@ -133,6 +144,9 @@ GtkTextBuffer *logger_text  = NULL,
               *user_text    = NULL;
 
 LogDisplay *logger = NULL;
+
+char xms_string[16] = {'1','2','8',0};
+char xmx_string[16] = {'1','0','2','4',0};
 ```
 
 </details>
@@ -380,6 +394,22 @@ Public
 Private
 -------
 
+- `on_settings_xms_changed(GtkWidget* widget, gpointer data)`:<br>
+  Convert the <b>string</b> from the <b>entry</b> into <b>boot memory</b> of the JavaVM.<br>
+  Return type: `void`.
+
+- `on_settings_xmx_changed(GtkWidget* widget, gpointer data)`:<br>
+  Convert the <b>string</b> from the <b>entry</b> into <b>max memory</b> of the JavaVM.<br>
+  Return type: `void`.
+
+- `on_settings_extra_arguments_changed(GtkWidget* widget, gpointer data)`:<br>
+  Copy the <b>string</b> from the <b>entry</b> into <b>extra arguments</b> of the JavaVM.<br>
+  Return type: `void`.
+
+- `CreateSettingsWindow(gpointer data)`:<br>
+  Create a <b>JavaVM settings</b> window, containing <b>boot memory</b>, <b>max memory</b>, and <b>extra arguments</b> entries.
+  Return type: `void`.
+
 - `on_version_choose(GtkWidget* widget, gpointer data)`:<br>
   Assign game version to <b>intern game data</b>.<br>
   Return type: `void`.
@@ -398,6 +428,10 @@ Private
 
 - `on_play_clicked(GtkWidget* widget, LogDisplay* log_display)`:<br>
   Handle <b>Play</b> button <b>click event</b> on a separate thread.<br>
+  Return type: `void`.
+
+- `on_settings_clicked(GtkWidget* widget, LogDisplay* log_display)`:<br>
+  Handle <b>Settings</b> button <b>click event</b> on a separate thread.<br>
   Return type: `void`.
 
 - `InitialiseWindow(const char* window_name, const char* window_icon, const char* window_background, int size_x, int size_y, GtkWindowPosition window_position)`:<br>

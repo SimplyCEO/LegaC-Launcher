@@ -27,6 +27,93 @@ GtkTextBuffer *logger_text  = NULL,
 
 LogDisplay *logger = NULL;
 
+/* Settings window */
+
+char xms_string[16] = {'1','2','8',0};
+char xmx_string[16] = {'1','0','2','4',0};
+
+static void
+on_settings_xms_changed(GtkWidget* widget, gpointer data)
+{
+  strcpy(xms_string, gtk_entry_get_text(GTK_ENTRY(widget)));
+  application.settings.xms = atoi(xms_string);
+}
+
+static void
+on_settings_xmx_changed(GtkWidget* widget, gpointer data)
+{
+  strcpy(xmx_string, gtk_entry_get_text(GTK_ENTRY(widget)));
+  application.settings.xmx = atoi(xmx_string);
+}
+
+static void
+on_settings_extra_arguments_changed(GtkWidget* widget, gpointer data)
+{ strcpy(application.settings.extra_arguments, gtk_entry_get_text(GTK_ENTRY(widget))); }
+
+static void
+CreateSettingsWindow(gpointer data)
+{
+  GtkWidget* settings_window = CApplication.Window.Create("Launcher settings", 210, 70, GTK_WIN_POS_CENTER);
+  GtkWidget* settings_vbox   = CApplication.Box.Create(settings_window, GTK_ORIENTATION_VERTICAL);
+  { /* JavaVM Memory Management */
+    GtkWidget* settings_memory_hbox   = CApplication.Box.Create(settings_vbox, GTK_ORIENTATION_HORIZONTAL);
+    { GtkWidget* settings_memory_vbox_start = CApplication.Box.Create(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
+      { /* Label */
+        GtkWidget* settings_xms_label = gtk_label_new("JavaVM Boot Memory");
+        gtk_box_pack_start(GTK_BOX(settings_memory_vbox_start), settings_xms_label, FALSE, FALSE, 1);
+        /* Entry */
+        GtkWidget* settings_xms    = gtk_entry_new();
+        { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_xms), "");
+          g_signal_connect(settings_xms, "changed", G_CALLBACK(on_settings_xms_changed), NULL);
+        }
+        CApplication.Box.Resize(settings_xms, 70, 35);
+        gtk_widget_set_halign(settings_xms, GTK_ALIGN_START);
+        gtk_entry_set_text(GTK_ENTRY(settings_xms), xms_string);
+        gtk_box_pack_end(GTK_BOX(settings_memory_vbox_start), settings_xms, FALSE, FALSE, 0);
+      }
+      gtk_box_pack_start(GTK_BOX(settings_memory_hbox), settings_memory_vbox_start, FALSE, FALSE, 0);
+
+      GtkWidget* settings_memory_vbox_end = CApplication.Box.Create(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
+      { /* Label */
+        GtkWidget* settings_xmx_label = gtk_label_new("JavaVM Max Memory");
+        gtk_box_pack_start(GTK_BOX(settings_memory_vbox_end), settings_xmx_label, FALSE, FALSE, 1);
+        /* Entry */
+        GtkWidget* settings_xmx    = gtk_entry_new();
+        { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_xmx), "");
+          g_signal_connect(settings_xmx, "changed", G_CALLBACK(on_settings_xmx_changed), NULL);
+        }
+        CApplication.Box.Resize(settings_xmx, 70, 35);
+        gtk_widget_set_halign(settings_xmx, GTK_ALIGN_START);
+        gtk_entry_set_text(GTK_ENTRY(settings_xmx), xmx_string);
+        gtk_box_pack_end(GTK_BOX(settings_memory_vbox_end), settings_xmx, FALSE, FALSE, 0);
+      }
+      gtk_box_pack_end(GTK_BOX(settings_memory_hbox), settings_memory_vbox_end, FALSE, FALSE, 0);
+    }
+    gtk_box_pack_start(GTK_BOX(settings_vbox), settings_memory_hbox, FALSE, FALSE, 3);
+    
+    /* Extra arguments */
+    GtkWidget* settings_extra_arguments_vbox = CApplication.Box.Create(settings_vbox, GTK_ORIENTATION_VERTICAL);
+    { /* Label */
+      GtkWidget* settings_extra_arguments_label = gtk_label_new("Extra arguments");
+      gtk_box_pack_start(GTK_BOX(settings_extra_arguments_vbox), settings_extra_arguments_label, FALSE, FALSE, 1);
+      /* Entry */
+      GtkWidget* settings_extra_arguments    = gtk_entry_new();
+      { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_extra_arguments), "");
+        g_signal_connect(settings_extra_arguments, "changed", G_CALLBACK(on_settings_extra_arguments_changed), NULL);
+      }
+      CApplication.Box.Resize(settings_extra_arguments, 310, 35);
+      gtk_widget_set_halign(settings_extra_arguments, GTK_ALIGN_START);
+      gtk_entry_set_text(GTK_ENTRY(settings_extra_arguments), application.settings.extra_arguments);
+      gtk_box_pack_end(GTK_BOX(settings_extra_arguments_vbox), settings_extra_arguments, FALSE, FALSE, 0);
+    }
+    gtk_box_pack_end(GTK_BOX(settings_vbox), settings_extra_arguments_vbox, FALSE, FALSE, 3);
+  }
+
+  gtk_widget_show_all(settings_window);
+}
+
+/* Main window */
+
 static void
 on_version_choose(GtkWidget* widget, gpointer data)
 {
@@ -76,7 +163,9 @@ static void
 on_play_clicked(GtkWidget* widget, LogDisplay* log_display)
 { GThread* thread = g_thread_new("initialise_game", (GThreadFunc)initialise_game, NULL); }
 
-
+static void
+on_settings_clicked(GtkWidget* widget, gpointer data)
+{ GThread* thread = g_thread_new("CreateSettingsWindow", (GThreadFunc)CreateSettingsWindow, NULL); }
 
 static void
 InitialiseWindow(const char* window_name, const char* window_icon, const char* window_background, int size_x, int size_y, GtkWindowPosition window_position)
@@ -140,6 +229,7 @@ CreateDocker(void)
     gtk_box_pack_start(GTK_BOX(profile_box), version_list, FALSE, FALSE, 0);
 
     settings_button = gtk_button_new_with_label("Settings");
+    { g_signal_connect(settings_button, "clicked", G_CALLBACK(on_settings_clicked), NULL); }
     gtk_widget_set_halign(settings_button, GTK_ALIGN_CENTER);
     gtk_box_pack_start(GTK_BOX(profile_box), settings_button, FALSE, FALSE, 0);
   }
