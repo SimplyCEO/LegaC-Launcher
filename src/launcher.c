@@ -53,58 +53,46 @@ on_settings_extra_arguments_changed(GtkWidget* widget, gpointer data)
 static void
 CreateSettingsWindow(gpointer data)
 {
-  GtkWidget* settings_window = CApplication.Window.Create("Launcher settings", 210, 70, GTK_WIN_POS_CENTER);
-  GtkWidget* settings_vbox   = CApplication.Box.Create(settings_window, GTK_ORIENTATION_VERTICAL);
+  GtkWidget* settings_window = CApplication.Create.Window("Launcher settings", 210, 70, GTK_WIN_POS_CENTER);
+  GtkWidget* settings_vbox   = CApplication.Create.Box(settings_window, GTK_ORIENTATION_VERTICAL);
   { /* JavaVM Memory Management */
-    GtkWidget* settings_memory_hbox   = CApplication.Box.Create(settings_vbox, GTK_ORIENTATION_HORIZONTAL);
-    { GtkWidget* settings_memory_vbox_start = CApplication.Box.Create(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
+    GtkWidget* settings_memory_hbox   = CApplication.Create.Box(settings_vbox, GTK_ORIENTATION_HORIZONTAL);
+    { GtkWidget* settings_memory_vbox_start = CApplication.Create.Box(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
       { /* Label */
-        GtkWidget* settings_xms_label = gtk_label_new("JavaVM Boot Memory");
-        gtk_box_pack_start(GTK_BOX(settings_memory_vbox_start), settings_xms_label, FALSE, FALSE, 1);
+        GtkWidget* settings_xms_label = CApplication.Create.Label("JavaVM Boot Memory", settings_memory_vbox_start, "start");
         /* Entry */
-        GtkWidget* settings_xms    = gtk_entry_new();
-        { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_xms), "");
-          g_signal_connect(settings_xms, "changed", G_CALLBACK(on_settings_xms_changed), NULL);
-        }
-        CApplication.Box.Resize(settings_xms, 70, 35);
-        gtk_widget_set_halign(settings_xms, GTK_ALIGN_START);
-        gtk_entry_set_text(GTK_ENTRY(settings_xms), xms_string);
-        gtk_box_pack_end(GTK_BOX(settings_memory_vbox_start), settings_xms, FALSE, FALSE, 0);
+        GtkWidget* settings_xms = CApplication.Create.Entry("", settings_memory_vbox_start, "end");
+                                  CApplication.Event.Align(settings_xms, "horizontal", GTK_ALIGN_START);
+                                  CApplication.Event.Resize(settings_xms, 70, 35);
+                                  CApplication.Event.Connect(settings_xms, "changed", on_settings_xms_changed, NULL);
+                                  CApplication.Update.Entry.Text(settings_xms, xms_string);
       }
-      gtk_box_pack_start(GTK_BOX(settings_memory_hbox), settings_memory_vbox_start, FALSE, FALSE, 0);
+      CApplication.Event.Attach(settings_memory_vbox_start, settings_memory_hbox, "start", FALSE, FALSE, 0);
 
-      GtkWidget* settings_memory_vbox_end = CApplication.Box.Create(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
+      GtkWidget* settings_memory_vbox_end = CApplication.Create.Box(settings_memory_hbox, GTK_ORIENTATION_VERTICAL);
       { /* Label */
-        GtkWidget* settings_xmx_label = gtk_label_new("JavaVM Max Memory");
-        gtk_box_pack_start(GTK_BOX(settings_memory_vbox_end), settings_xmx_label, FALSE, FALSE, 1);
+        GtkWidget* settings_xmx_label = CApplication.Create.Label("JavaVM Max Memory", settings_memory_vbox_end, "start");
         /* Entry */
-        GtkWidget* settings_xmx    = gtk_entry_new();
-        { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_xmx), "");
-          g_signal_connect(settings_xmx, "changed", G_CALLBACK(on_settings_xmx_changed), NULL);
-        }
-        CApplication.Box.Resize(settings_xmx, 70, 35);
-        gtk_widget_set_halign(settings_xmx, GTK_ALIGN_START);
-        gtk_entry_set_text(GTK_ENTRY(settings_xmx), xmx_string);
-        gtk_box_pack_end(GTK_BOX(settings_memory_vbox_end), settings_xmx, FALSE, FALSE, 0);
+        GtkWidget* settings_xmx = CApplication.Create.Entry("", settings_memory_vbox_end, "end");
+                                  CApplication.Event.Align(settings_xmx, "horizontal", GTK_ALIGN_START);
+                                  CApplication.Event.Resize(settings_xmx, 70, 35);
+                                  CApplication.Event.Connect(settings_xmx, "changed", on_settings_xmx_changed, NULL);
+                                  CApplication.Update.Entry.Text(settings_xmx, xmx_string);
       }
       gtk_box_pack_end(GTK_BOX(settings_memory_hbox), settings_memory_vbox_end, FALSE, FALSE, 0);
     }
-    gtk_box_pack_start(GTK_BOX(settings_vbox), settings_memory_hbox, FALSE, FALSE, 3);
+    CApplication.Event.Attach(settings_memory_hbox, settings_vbox, "start", FALSE, FALSE, 3);
     
     /* Extra arguments */
-    GtkWidget* settings_extra_arguments_vbox = CApplication.Box.Create(settings_vbox, GTK_ORIENTATION_VERTICAL);
+    GtkWidget* settings_extra_arguments_vbox = CApplication.Create.Box(settings_vbox, GTK_ORIENTATION_VERTICAL);
     { /* Label */
-      GtkWidget* settings_extra_arguments_label = gtk_label_new("Extra arguments");
-      gtk_box_pack_start(GTK_BOX(settings_extra_arguments_vbox), settings_extra_arguments_label, FALSE, FALSE, 1);
+      GtkWidget* settings_extra_arguments_label = CApplication.Create.Label("Extra arguments", settings_extra_arguments_vbox, "start");
       /* Entry */
-      GtkWidget* settings_extra_arguments    = gtk_entry_new();
-      { gtk_entry_set_placeholder_text(GTK_ENTRY(settings_extra_arguments), "");
-        g_signal_connect(settings_extra_arguments, "changed", G_CALLBACK(on_settings_extra_arguments_changed), NULL);
-      }
-      CApplication.Box.Resize(settings_extra_arguments, 310, 35);
-      gtk_widget_set_halign(settings_extra_arguments, GTK_ALIGN_START);
-      gtk_entry_set_text(GTK_ENTRY(settings_extra_arguments), application.settings.extra_arguments);
-      gtk_box_pack_end(GTK_BOX(settings_extra_arguments_vbox), settings_extra_arguments, FALSE, FALSE, 0);
+      GtkWidget* settings_extra_arguments = CApplication.Create.Entry("", settings_extra_arguments_vbox, "end");
+                                            CApplication.Event.Align(settings_extra_arguments, "horizontal", GTK_ALIGN_START);
+                                            CApplication.Event.Resize(settings_extra_arguments, 310, 35);
+                                            CApplication.Event.Connect(settings_extra_arguments, "changed", on_settings_extra_arguments_changed, NULL);
+                                            CApplication.Update.Entry.Text(settings_extra_arguments, application.settings.extra_arguments);
     }
     gtk_box_pack_end(GTK_BOX(settings_vbox), settings_extra_arguments_vbox, FALSE, FALSE, 3);
   }
@@ -160,7 +148,7 @@ onLogWindow(GtkWidget* widget, LogDisplay* log_display)
 }
 
 static void
-on_play_clicked(GtkWidget* widget, LogDisplay* log_display)
+on_play_clicked(GtkWidget* widget, void* log_display)
 { GThread* thread = g_thread_new("initialise_game", (GThreadFunc)initialise_game, NULL); }
 
 static void
@@ -170,9 +158,9 @@ on_settings_clicked(GtkWidget* widget, gpointer data)
 static void
 InitialiseWindow(const char* window_name, const char* window_icon, const char* window_background, int size_x, int size_y, GtkWindowPosition window_position)
 {
-  window =  CApplication.Window.Create(window_name, size_x, size_y, window_position);
-            CApplication.Window.SetIcon(window, window_icon);
-            CApplication.Window.SetBackground(window, window_background);
+  window =  CApplication.Create.Window(window_name, size_x, size_y, window_position);
+            CApplication.Icon.Window(window, window_icon);
+            CApplication.Background.Window(window, window_background);
 }
 
 static void
@@ -183,13 +171,13 @@ CreateHeader(void)
   if (NewsPageStatus != NULL)
   { useNewsPage = atoi(NewsPageStatus); }
 
-  vbox  = CApplication.Box.Create(window, GTK_ORIENTATION_VERTICAL);
+  vbox  = CApplication.Create.Box(window, GTK_ORIENTATION_VERTICAL);
   gtk_widget_set_vexpand(vbox, TRUE);
 
   if (useNewsPage)
   { /* Old Minecraft news */
     WebKitWebView* web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
-    gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(web_view), TRUE, TRUE, 0);
+    CApplication.Event.Attach(GTK_WIDGET(web_view), vbox, "start", TRUE, TRUE, 0);
 
     if (CFileManager.Validate(application.news.html) == 0)
     { CInternet.HandleData(application.news.html, application.news.url); }
@@ -207,14 +195,14 @@ static void
 CreateDocker(void)
 {
   /* Docker container grid */
-  hbox = CApplication.Box.Create(window, GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
+  hbox = CApplication.Create.Box(window, GTK_ORIENTATION_HORIZONTAL);
+         CApplication.Event.Attach(hbox, vbox, "end", FALSE, FALSE, 5);
   hgrid = gtk_grid_new();
-  gtk_box_pack_start(GTK_BOX(hbox), hgrid, FALSE, FALSE, 0);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hgrid), TRUE);
+          CApplication.Event.Attach(hgrid, hbox, "start", FALSE, FALSE, 0);
+          gtk_grid_set_column_homogeneous(GTK_GRID(hgrid), TRUE);
 
   /* Game version */
-  profile_box = CApplication.Box.Create(NULL, GTK_ORIENTATION_VERTICAL);
+  profile_box = CApplication.Create.Box(NULL, GTK_ORIENTATION_VERTICAL);
   { version_list = gtk_combo_box_text_new();
     { /* TODO: Get all files from internet and store somewhere in user configuration. */
       gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(version_list), "1.5.2");
@@ -223,46 +211,43 @@ CreateDocker(void)
       gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(version_list), "1.9");
       gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(version_list), "1.12.2");
       gtk_combo_box_set_active(GTK_COMBO_BOX(version_list), 3);
-      g_signal_connect(version_list, "changed", G_CALLBACK(on_version_choose), NULL);
+      CApplication.Event.Connect(version_list, "changed", on_version_choose, NULL);
     }
-    gtk_widget_set_halign(version_list, GTK_ALIGN_CENTER);
-    gtk_box_pack_start(GTK_BOX(profile_box), version_list, FALSE, FALSE, 0);
+    CApplication.Event.Align(version_list, "horizontal", GTK_ALIGN_CENTER);
+    CApplication.Event.Attach(version_list, profile_box, "start", FALSE, FALSE, 0);
 
     settings_button = gtk_button_new_with_label("Settings");
-    { g_signal_connect(settings_button, "clicked", G_CALLBACK(on_settings_clicked), NULL); }
-    gtk_widget_set_halign(settings_button, GTK_ALIGN_CENTER);
-    gtk_box_pack_start(GTK_BOX(profile_box), settings_button, FALSE, FALSE, 0);
+    { CApplication.Event.Connect(settings_button, "clicked", on_settings_clicked, NULL); }
+    CApplication.Event.Align(settings_button, "horizontal", GTK_ALIGN_CENTER);
+    CApplication.Event.Attach(settings_button, profile_box, "start", FALSE, FALSE, 0);
   }
-  gtk_widget_set_halign(profile_box, GTK_ALIGN_START);
+  CApplication.Event.Align(profile_box, "horizontal", GTK_ALIGN_START);
   gtk_grid_attach(GTK_GRID(hgrid), profile_box, 0, 0, 1, 1);
 
   /* Download and/or Play */
-  play_box = CApplication.Box.Create(NULL, GTK_ORIENTATION_VERTICAL);
+  play_box = CApplication.Create.Box(NULL, GTK_ORIENTATION_VERTICAL);
   { play_button = gtk_button_new_with_label("Play");
-    { g_signal_connect(play_button, "clicked", G_CALLBACK(on_play_clicked), NULL); }
-    CApplication.Box.Resize(play_button, 250, 100);
-    gtk_widget_set_halign(play_button, GTK_ALIGN_START);
-    gtk_box_pack_start(GTK_BOX(play_box), play_button, FALSE, FALSE, 0);
+    { CApplication.Event.Connect(play_button, "clicked", on_play_clicked, NULL); }
+    CApplication.Event.Resize(play_button, 250, 100);
+    CApplication.Event.Align(play_button, "horizontal", GTK_ALIGN_START);
+    CApplication.Event.Attach(play_button, play_box, "start", FALSE, FALSE, 0);
   }
   gtk_grid_attach(GTK_GRID(hgrid), play_box, 1, 0, 1, 1);
 
   /* User profile and Help page */
-  info_box = CApplication.Box.Create(hbox, GTK_ORIENTATION_VERTICAL);
-  { user_entry = gtk_entry_new();
-    { gtk_entry_set_placeholder_text(GTK_ENTRY(user_entry), "Username");
-      g_signal_connect(user_entry, "changed", G_CALLBACK(on_username_changed), user_text);
-    }
-    CApplication.Box.Resize(user_entry, 70, 35);
-    gtk_widget_set_halign(user_entry, GTK_ALIGN_START);
-    gtk_box_pack_start(GTK_BOX(info_box), user_entry, FALSE, FALSE, 3);
+  info_box = CApplication.Create.Box(hbox, GTK_ORIENTATION_VERTICAL);
+  { user_entry = CApplication.Create.Entry("Username", info_box, "start");
+                 CApplication.Event.Align(user_entry, "horizontal", GTK_ALIGN_START);
+                 CApplication.Event.Resize(user_entry, 70, 35);
+                 CApplication.Event.Connect(user_entry, "changed", on_username_changed, user_text);
 
-    repository = gtk_button_new_with_label("LegaC Help");
-    { g_signal_connect(repository, "clicked", G_CALLBACK(on_click_open_website), application.help.url); }
-    CApplication.Box.Resize(repository, 140, 35);
-    gtk_widget_set_halign(repository, GTK_ALIGN_CENTER);
-    gtk_box_pack_start(GTK_BOX(info_box), repository, FALSE, FALSE, 3);
+    repository = gtk_button_new_with_label("Help");
+    { CApplication.Event.Connect(repository, "clicked", on_click_open_website, application.help.url); }
+    CApplication.Event.Resize(repository, 140, 35);
+    CApplication.Event.Align(repository, "horizontal", GTK_ALIGN_CENTER);
+    CApplication.Event.Attach(repository, info_box, "start", FALSE, FALSE, 3);
   }
-  gtk_widget_set_halign(info_box, GTK_ALIGN_END);
+  CApplication.Event.Align(info_box, "horizontal", GTK_ALIGN_END);
   gtk_widget_set_hexpand(info_box, TRUE);
   gtk_grid_attach(GTK_GRID(hgrid), info_box, 2, 0, 1, 1);
 }

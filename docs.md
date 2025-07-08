@@ -176,34 +176,65 @@ Private
 Public
 ------
 
-- `Box`:<br>
-  * `Create(GtkWidget* container, GtkOrientation orientation)`:<br>
+- `Background`:<br>
+  * `Window(GtkWidget* window, const char* filepath)`:<br>
+    Set the background image, from a <b>file path</b>, forcing the size to `96x96`.<br>
+    Return type: `void`.
+
+- `Create`:<br>
+  * `Box(GtkWidget* container, GtkOrientation orientation)`:<br>
     Create a box <b>widget</b> attached to a <b>container</b> with a <b>[GTK orientation](https://docs.gtk.org/gtk3/enum.Orientation.html#members)</b>.<br>
     If a `NULL` is defined for <b>container</b>, it will not attach.<br>
-    Return type: `GtkWidget*`.<br>
-  * `Resize(GtkWidget* box, int size_x, int size_y)`:<br>
+    Return type: `GtkWidget*`.
+
+  * `Entry(const char* description, GtkWidget* container, const char* position)`:<br>
+    Return type: `GtkWidget*`.
+
+  * `Label(const char* title, GtkWidget* container, const char* position)`:<br>
+    Return type: `GtkWidget*`.
+
+  * `ProgressBar(GtkWidget* container, const char* position)`:<br>
+    Return type: `GtkWidget*`.
+  
+  * `Window(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)`:<br>
+    Create window <b>widget</b> based on <b>name</b>, <b>size</b>, and <b>[GTK window position](https://docs.gtk.org/gtk3/enum.WindowPosition.html#members)</b>.<br>
+    First window will be treated as main window.<br>
+    Return type: `GtkWidget*`.
+
+- `Event`:<br>
+  * `Connect(GtkWidget* widget, const char* mode, void (*function)(GtkWidget*,gpointer), gpointer data)`:<br>
+    Return type: `void`.
+
+  * `Align(GtkWidget* widget, const char* position, GtkAlign align)`:<br>
+    Return type: `void`.
+
+  * `Attach(GtkWidget* widget, GtkWidget* container, const char* position, gboolean h_expand, gboolean v_expand, unsigned short padding)`:<br>
+    Return type: `void`.
+
+  * `Resize(GtkWidget* widget, int size_x, int size_y)`:<br>
     Same as <b>set_widget_size</b>.<br>
     Return type: `void`.
 
-- `Text`:<br>
+- `Icon`:<br>
+  * `Window(GtkWidget* window, const char* filepath)`:<br>
+    Set the application icon, from a <b>file path</b>.<br>
+    Return type: `void`.
+
+- `Update`:<br>
+  * `Entry`:<br>
+    * `Description(GtkWidget* widget, const char* description)`:<br>
+      Return type: `void`.
+    
+    * `Text(GtkWidget* widget, const char* definition)`:<br>
+      Return type: `void`.
+  
+  * `Label`:<br>
+    * `Text(GtkWidget* widget, const char* title)`:<br>
+      Return type: `void`.
+
   * `Logger(GtkWidget* widget)`:<br>
     Create a read-only log box.<br>
     Return type: `LogDisplay*`.
-
-- `Window`:<br>
-  * `Create(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)`:<br>
-    Create window <b>widget</b> based on <b>name</b>, <b>size</b>, and <b>[GTK window position](https://docs.gtk.org/gtk3/enum.WindowPosition.html#members)</b>.<br>
-    First window will be treated as main window.<br>
-    Return type: `GtkWidget*`.<br>
-  * `Resize(GtkWidget* box, int size_x, int size_y)`:<br>
-    Same as <b>set_widget_size</b>.<br>
-    Return type: `void`.<br>
-  * `SetIcon(GtkWidget* window, const char* filepath)`:<br>
-    Set the application icon, from a <b>file path</b>.<br>
-    Return type: `void`.<br>
-  * `SetBackground(GtkWidget* window, const char* filepath)`:<br>
-    Set the background image, from a <b>file path</b>, forcing the size to `96x96`.<br>
-    Return type: `void`.
 
 - `Initialise(int argc, char** argv)`:<br>
   Start GTK application.<br>
@@ -211,6 +242,9 @@ Public
 
 - `Loop(void)`:<br>
   Avoid closing the application while main window is still running.<br>
+  Return type: `void`.
+
+- `SetupPath(void)`:<br>
   Return type: `void`.
 
 </details>

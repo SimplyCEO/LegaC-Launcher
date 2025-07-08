@@ -6,11 +6,17 @@
 
 ApplicationData application =
 {
-  {0}, "LegaC Launcher", {0}, {0}, "v0.0.7",
+  {0}, "LegaC Launcher", {0}, {0}, "v0.0.8",
   { 128, 1024, {0}, { 800, 600 } },
   { {0}, "https://mcupdate.tumblr.com" },
   { {0}, "https://gitlab.com/SimplyCEO/LegaC-Launcher/-/issues" }
 };
+
+unsigned char isMainWindowCreated = 0;
+
+/*
+ ==============================================================================================================
+ */
 
 static void
 on_window_destroy(GtkWidget *widget, gpointer data)
@@ -37,8 +43,31 @@ process_log_messages(LogDisplay *log_display)
   return TRUE;
 }
 
+/*
+ ==============================================================================================================
+ */
+
+void
+_A_Background_Window(GtkWidget* window, const char* filepath)
+{
+  GtkCssProvider* provider = gtk_css_provider_new();
+
+  gchar* css = g_strdup_printf("window { background-image: url('%s'); background-size: 96px 96px; background-repeat: repeat; }", filepath);
+  gtk_css_provider_load_from_data(provider, css, -1, NULL);
+
+  GtkStyleContext* style_context = gtk_widget_get_style_context(window);
+  gtk_style_context_add_provider(style_context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  g_free(css);
+  g_object_unref(provider);
+}
+
+/*
+ ==============================================================================================================
+ */
+
 GtkWidget*
-_A_Box_Create(GtkWidget* container, GtkOrientation orientation)
+_A_Create_Box(GtkWidget* container, GtkOrientation orientation)
 {
   GtkWidget *box = gtk_box_new(orientation, 0);
   if (container != NULL)
@@ -47,14 +76,143 @@ _A_Box_Create(GtkWidget* container, GtkOrientation orientation)
   return box;
 }
 
-void
-_A_Box_Resize(GtkWidget* box, int size_x, int size_y)
+GtkWidget*
+_A_Create_Entry(const char* description, GtkWidget* container, const char* position)
 {
-  set_widget_size(box, size_x, size_y);
+  GtkWidget* entry = gtk_entry_new();
+  gtk_entry_set_placeholder_text(GTK_ENTRY(entry), description);
+
+  switch (position[0])
+  { case 'E': case 'e': gtk_box_pack_end(GTK_BOX(container), entry, FALSE, FALSE, 0); break;
+    default: gtk_box_pack_start(GTK_BOX(container), entry, FALSE, FALSE, 0); break;
+  }
+
+  return entry;
 }
 
+GtkWidget*
+_A_Create_Label(const char* title, GtkWidget* container, const char* position)
+{
+  GtkWidget* label = gtk_label_new(title);
+
+  switch (position[0])
+  { case 'E': case 'e': gtk_box_pack_end(GTK_BOX(container), label, FALSE, FALSE, 0); break;
+    default: gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0); break;
+  }
+
+  return label;
+}
+
+GtkWidget*
+_A_Create_ProgressBar(GtkWidget* container, const char* position)
+{
+  GtkWidget* progress_bar = gtk_progress_bar_new();
+
+  switch (position[0])
+  { case 'E': case 'e': gtk_box_pack_end(GTK_BOX(container), progress_bar, FALSE, TRUE, 0); break;
+    default: gtk_box_pack_start(GTK_BOX(container), progress_bar, FALSE, TRUE, 0); break;
+  }
+
+  return progress_bar;
+}
+
+GtkWidget*
+_A_Create_Window(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)
+{
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_window_set_title(GTK_WINDOW(window), window_name);
+  gtk_window_set_default_size(GTK_WINDOW(window), size_x, size_y);
+  gtk_window_set_position(GTK_WINDOW(window), window_position);
+  gtk_container_set_border_width(GTK_CONTAINER(window), 0);
+
+  /* Destroy window after quitting application. */  
+  if (isMainWindowCreated == 0)
+  { g_signal_connect(window, "destroy", G_CALLBACK(on_window_destroy), NULL);
+    isMainWindowCreated = 1;
+  }
+
+  return window;
+}
+
+/*
+ ==============================================================================================================
+ */
+
+void
+_A_Event_Align(GtkWidget* widget, const char* position, GtkAlign align)
+{
+  switch (position[0])
+  { case 'V': case 'v': gtk_widget_set_valign(widget, align); break;
+    default: gtk_widget_set_halign(widget, align); break;
+  }
+}
+
+void
+_A_Event_Attach(GtkWidget* widget, GtkWidget* container, const char* position, gboolean h_expand, gboolean v_expand, unsigned short padding)
+{
+  switch (position[0])
+  { case 'E': case 'e': gtk_box_pack_end(GTK_BOX(container), widget, h_expand, v_expand, padding); break;
+    default: gtk_box_pack_start(GTK_BOX(container), widget, h_expand, v_expand, padding); break;
+  }
+}
+
+void
+_A_Event_Connect(GtkWidget* widget, const char* mode, void (*function)(GtkWidget*,gpointer), gpointer data)
+{
+  g_signal_connect(widget, mode, G_CALLBACK(function), data);
+}
+
+void
+_A_Event_Resize(GtkWidget* widget, int size_x, int size_y)
+{
+  set_widget_size(widget, size_x, size_y);
+}
+
+/*
+ ==============================================================================================================
+ */
+
+void
+_A_Icon_Window(GtkWidget* window, const char* filepath)
+{
+  GdkPixbuf* icon = gdk_pixbuf_new_from_file(filepath, NULL);
+  gtk_window_set_icon(GTK_WINDOW(window), icon);
+  g_object_unref(icon);
+}
+
+/*
+ ==============================================================================================================
+ */
+
+void
+_A_Update_Entry_Description(GtkWidget* widget, const char* description)
+{
+  gtk_entry_set_placeholder_text(GTK_ENTRY(widget), description);
+}
+
+void
+_A_Update_Entry_Text(GtkWidget* widget, const char* definition)
+{
+  gtk_entry_set_text(GTK_ENTRY(widget), definition);
+}
+
+/*
+ --------------------------------------------------------------------------------------------------------------
+ */
+
+void
+_A_Update_Label_Text(GtkWidget* widget, const char* title)
+{
+  gtk_label_set_text(GTK_LABEL(widget), title);
+}
+
+/*
+ --------------------------------------------------------------------------------------------------------------
+ */
+
 LogDisplay*
-_A_Text_Logger(GtkWidget* widget)
+_A_Update_Logger(GtkWidget* widget)
 {
   LogDisplay* log_display;
   GtkWidget* scrolled_window;
@@ -79,54 +237,13 @@ _A_Text_Logger(GtkWidget* widget)
   return log_display;
 }
 
-unsigned char isMainWindowCreated = 0;
-GtkWidget*
-_A_Window_Create(const char* window_name, int size_x, int size_y, GtkWindowPosition window_position)
-{
-  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+/*
+ ==============================================================================================================
+ */
 
-  gtk_window_set_title(GTK_WINDOW(window), window_name);
-  gtk_window_set_default_size(GTK_WINDOW(window), size_x, size_y);
-  gtk_window_set_position(GTK_WINDOW(window), window_position);
-  gtk_container_set_border_width(GTK_CONTAINER(window), 0);
-
-  /* Destroy window after quitting application. */  
-  if (isMainWindowCreated == 0)
-  { g_signal_connect(window, "destroy", G_CALLBACK(on_window_destroy), NULL);
-    isMainWindowCreated = 1;
-  }
-
-  return window;
-}
-
-void
-_A_Window_SetIcon(GtkWidget* window, const char* filepath)
-{
-  GdkPixbuf* icon = gdk_pixbuf_new_from_file(filepath, NULL);
-  gtk_window_set_icon(GTK_WINDOW(window), icon);
-  g_object_unref(icon);
-}
-
-void
-_A_Window_SetBackground(GtkWidget* window, const char* filepath)
-{
-  GtkCssProvider* provider = gtk_css_provider_new();
-
-  gchar* css = g_strdup_printf("window { background-image: url('%s'); background-size: 96px 96px; background-repeat: repeat; }", filepath);
-  gtk_css_provider_load_from_data(provider, css, -1, NULL);
-
-  GtkStyleContext* style_context = gtk_widget_get_style_context(window);
-  gtk_style_context_add_provider(style_context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-  g_free(css);
-  g_object_unref(provider);
-}
-
-void
-_A_Window_Resize(GtkWidget* window, int size_x, int size_y)
-{
-  set_widget_size(window, size_x, size_y);
-}
+/*
+ ==============================================================================================================
+ */
 
 void
 _A_Initialise(int argc, char* argv[])

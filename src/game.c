@@ -139,12 +139,10 @@ initialise_game(gpointer data)
 
   /* Start progress bar */
   dl_total = (Library)LIBRARY_LAST-1;
-  GtkWidget* progress_window  = CApplication.Window.Create("Downloading dependencies...", 350, 70, GTK_WIN_POS_CENTER);
-  GtkWidget* progress_box     = CApplication.Box.Create(progress_window, GTK_ORIENTATION_VERTICAL);
-             progress_label   = gtk_label_new(progress_label_text);
-  GtkWidget* progress_bar     = gtk_progress_bar_new();
-  gtk_box_pack_start(GTK_BOX(progress_box), progress_label, FALSE, TRUE, 0);
-  gtk_box_pack_end(GTK_BOX(progress_box), progress_bar, FALSE, TRUE, 0);
+  GtkWidget* progress_window  = CApplication.Create.Window("Downloading dependencies...", 350, 70, GTK_WIN_POS_CENTER);
+  GtkWidget* progress_box     = CApplication.Create.Box(progress_window, GTK_ORIENTATION_VERTICAL);
+             progress_label   = CApplication.Create.Label(progress_label_text, progress_box, "start");
+  GtkWidget* progress_bar     = CApplication.Create.ProgressBar(progress_box, "end");
   gtk_widget_show_all(progress_window);
   g_idle_add((GSourceFunc)update_progress_bar, progress_bar);
 
@@ -156,7 +154,7 @@ initialise_game(gpointer data)
   for (i=0; i<=(int)dl_total; i++)
   { download_library((Library)i); }
 
-  gtk_label_set_text(GTK_LABEL(progress_label), "Starting game...");
+  CApplication.Update.Label.Text(progress_label, "Starting game...");
   gtk_widget_destroy(GTK_WIDGET(progress_window));
 
   play_game(mc_version, mc_username, mc_gamedir, mc_class);
